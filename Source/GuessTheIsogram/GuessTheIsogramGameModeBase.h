@@ -20,6 +20,12 @@ class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 		UFUNCTION(BlueprintCallable, Category = "UMG Game")
 			void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass); 
 
+		UFUNCTION(BlueprintCallable, Category = "UMG Game")
+			FText GetText(FText EnteredText); 
+
+		UFUNCTION(BlueprintCallable, Category = "UMG Game")
+			bool LongerThanFive(FString EnteredString); 
+
 	protected:
 		// Called when the game starts
 		virtual void BeginPlay() override; 

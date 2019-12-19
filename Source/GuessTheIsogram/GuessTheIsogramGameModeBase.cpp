@@ -31,3 +31,18 @@ void AGuessTheIsogramGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> New
 			CurrentWidget->AddToViewport(); 
 	}
 }
+
+FText AGuessTheIsogramGameModeBase::GetText(FText EnteredText)
+{
+	FText NewText = EnteredText; 
+
+	return NewText; 
+}
+
+bool AGuessTheIsogramGameModeBase::LongerThanFive(FString EnteredString)
+{
+	if (EnteredString.Len() > 5)
+		return true;
+	else
+		return false; 
+}
