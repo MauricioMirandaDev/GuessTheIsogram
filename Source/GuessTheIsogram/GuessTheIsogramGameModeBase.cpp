@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "GuessTheIsogramGameModeBase.h"
 
 // Called when the game starts
@@ -9,6 +8,8 @@ void AGuessTheIsogramGameModeBase::BeginPlay()
 	Super::BeginPlay();
 
 	ChangeMenuWidget(StartingWidgetClass); 
+
+	InitializeGame(); 
 }
 
 // Remove the current widget and create a new one
@@ -32,17 +33,16 @@ void AGuessTheIsogramGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> New
 	}
 }
 
-FText AGuessTheIsogramGameModeBase::GetText(FText EnteredText)
+// Set up game variables
+FGameVariables AGuessTheIsogramGameModeBase::InitializeGame()
 {
-	FText NewText = EnteredText; 
+	FGameVariables GameVariables; 
 
-	return NewText; 
-}
+	GameVariables.MysteryWord = WordList[0]; 
 
-bool AGuessTheIsogramGameModeBase::LongerThanFive(FString EnteredString)
-{
-	if (EnteredString.Len() > 5)
-		return true;
-	else
-		return false; 
+	GameVariables.Lives = 5; 
+
+	GameVariables.bGameOver = false; 
+
+	return GameVariables; 
 }

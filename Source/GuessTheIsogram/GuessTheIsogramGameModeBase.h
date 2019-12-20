@@ -10,6 +10,23 @@
 /**
  * 
  */
+
+// Variables that will be used for game logic
+USTRUCT(BlueprintType)
+struct FGameVariables
+{
+	GENERATED_USTRUCT_BODY()
+		
+	UPROPERTY(BlueprintReadWrite)
+	FString MysteryWord;
+
+	UPROPERTY(BlueprintReadWrite)
+	int32 Lives;
+
+	UPROPERTY(BlueprintReadWrite)
+	bool bGameOver; 
+};
+
 UCLASS()
 class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 {
@@ -20,11 +37,9 @@ class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 		UFUNCTION(BlueprintCallable, Category = "UMG Game")
 			void ChangeMenuWidget(TSubclassOf<UUserWidget> NewWidgetClass); 
 
+		// Set up game variables
 		UFUNCTION(BlueprintCallable, Category = "UMG Game")
-			FText GetText(FText EnteredText); 
-
-		UFUNCTION(BlueprintCallable, Category = "UMG Game")
-			bool LongerThanFive(FString EnteredString); 
+			FGameVariables InitializeGame(); 
 
 	protected:
 		// Called when the game starts
@@ -37,4 +52,12 @@ class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 		// The widget instance we use as our menu
 		UPROPERTY()
 			UUserWidget* CurrentWidget; 
+
+		const TArray<FString> WordList = 
+		{
+			TEXT("red"),
+			TEXT("ray"),
+			TEXT("dog"),
+			TEXT("cat")
+		};
 };
