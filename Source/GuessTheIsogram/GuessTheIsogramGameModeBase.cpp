@@ -11,6 +11,8 @@ void AGuessTheIsogramGameModeBase::BeginPlay()
 
 	InitializeGame(); 
 
+	GetHints(); 
+
 	bIsIsogram(EnteredWord); 
 }
 
@@ -38,8 +40,6 @@ void AGuessTheIsogramGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> New
 // Set up game variables
 FGameVariables AGuessTheIsogramGameModeBase::InitializeGame()
 {
-	FGameVariables GameVariables; 
-
 	GameVariables.MysteryWord = WordList[FMath::RandRange(0, WordList.Num() - 1)]; 
 
 	GameVariables.Lives = 5; 
@@ -47,6 +47,31 @@ FGameVariables AGuessTheIsogramGameModeBase::InitializeGame()
 	GameVariables.bGameOver = false; 
 
 	return GameVariables; 
+}
+
+// Provide hints to the player 
+FHints AGuessTheIsogramGameModeBase::GetHints()
+{
+	int32 Vowels = 0, Consonants = 0; 
+
+	Hints.WordLength = TEXT("The word is ") + FString::FromInt(GameVariables.MysteryWord.Len()) + TEXT(" letters long"); 
+
+	Hints.FirstLetter = TEXT("The first letter is "); 
+	Hints.FirstLetter.AppendChar(GameVariables.MysteryWord[0]); 
+
+	for (int32 Index = 0; Index < GameVariables.MysteryWord.Len(); Index++)
+	{
+		if (GameVariables.MysteryWord[Index] == 'a' || GameVariables.MysteryWord[Index] == 'e' || GameVariables.MysteryWord[Index] == 'i'
+			|| GameVariables.MysteryWord[Index] == 'o' || GameVariables.MysteryWord[Index] == 'u')
+			Vowels++;
+		else
+			Consonants++; 
+	}
+	
+	Hints.Letters = TEXT("The word contains ") + FString::FromInt(Vowels) + TEXT(" vowel(s) and ") + FString::FromInt(Consonants) + 
+		TEXT(" consonant(s)"); 
+
+	return Hints; 
 }
 
 // Check if the player's guess is an isogram

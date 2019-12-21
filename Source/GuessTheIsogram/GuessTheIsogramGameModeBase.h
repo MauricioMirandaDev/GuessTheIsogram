@@ -27,6 +27,22 @@ struct FGameVariables
 	bool bGameOver; 
 };
 
+// Hints as to what the mystery word is
+USTRUCT(BlueprintType)
+struct FHints
+{
+	GENERATED_USTRUCT_BODY()
+
+	UPROPERTY(BlueprintReadWrite)
+	FString WordLength;
+
+	UPROPERTY(BlueprintReadWrite)
+	FString FirstLetter;
+
+	UPROPERTY(BlueprintReadWrite)
+	FString Letters;
+};
+
 UCLASS()
 class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 {
@@ -41,9 +57,17 @@ class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 		UFUNCTION(BlueprintCallable, Category = "UMG Game")
 			FGameVariables InitializeGame(); 
 
+		FGameVariables GameVariables;
+
 		// Check if the player's guess is an isogram
 		UFUNCTION(BlueprintCallable, Category = "UMG Game")
 			bool bIsIsogram(const FString& Word); 
+
+		// Provide hints to the player 
+		UFUNCTION(BlueprintCallable, Category = "UMG Game")
+			FHints GetHints(); 
+
+		FHints Hints; 
 
 	protected:
 		// Called when the game starts
