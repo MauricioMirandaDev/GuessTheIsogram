@@ -41,6 +41,10 @@ class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 		UFUNCTION(BlueprintCallable, Category = "UMG Game")
 			FGameVariables InitializeGame(); 
 
+		// Check if the player's guess is an isogram
+		UFUNCTION(BlueprintCallable, Category = "UMG Game")
+			bool bIsIsogram(const FString& Word); 
+
 	protected:
 		// Called when the game starts
 		virtual void BeginPlay() override; 
@@ -52,6 +56,10 @@ class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 		// The widget instance we use as our menu
 		UPROPERTY()
 			UUserWidget* CurrentWidget; 
+
+		// The player's guess
+		UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "UMG Game")
+			FString EnteredWord; 
 
 		const TArray<FString> WordList = 
 		{

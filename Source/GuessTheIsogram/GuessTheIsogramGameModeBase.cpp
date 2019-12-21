@@ -10,6 +10,8 @@ void AGuessTheIsogramGameModeBase::BeginPlay()
 	ChangeMenuWidget(StartingWidgetClass); 
 
 	InitializeGame(); 
+
+	bIsIsogram(EnteredWord); 
 }
 
 // Remove the current widget and create a new one
@@ -38,11 +40,26 @@ FGameVariables AGuessTheIsogramGameModeBase::InitializeGame()
 {
 	FGameVariables GameVariables; 
 
-	GameVariables.MysteryWord = WordList[0]; 
+	GameVariables.MysteryWord = WordList[FMath::RandRange(0, WordList.Num() - 1)]; 
 
 	GameVariables.Lives = 5; 
 
 	GameVariables.bGameOver = false; 
 
 	return GameVariables; 
+}
+
+// Check if the player's guess is an isogram
+bool AGuessTheIsogramGameModeBase::bIsIsogram(const FString& Word)
+{
+	for (int32 Index = 0; Index < Word.Len(); Index++)
+	{
+		for (int32 Comparison = Index + 1; Comparison < Word.Len(); Comparison++)
+		{
+			if (Word[Index] == Word[Comparison])
+				return false; 
+		}
+	}
+
+	return true; 
 }
