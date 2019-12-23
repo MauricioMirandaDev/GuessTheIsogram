@@ -12,12 +12,16 @@ void AGuessTheIsogramGameModeBase::BeginPlay()
 	InitializeGame(); 
 
 	GetHints(); 
-	
-	ProcessGuess(EnteredWord); 
+
+	GuessedCorrectly(EnteredWord); 
 
 	bIsIsogram(EnteredWord); 
 
+	bIsSameLength(EnteredWord); 
+
 	GetCorrectLetters(EnteredWord); 
+
+	OutOfLives(); 
 }
 
 // Remove the current widget and create a new one
@@ -78,28 +82,37 @@ FHints AGuessTheIsogramGameModeBase::GetHints()
 	return Hints; 
 }
 
-// Process the player's guess
-FGameVariables AGuessTheIsogramGameModeBase::ProcessGuess(const FString& Guess)
+// Check if the player correctly guessed the mystery word
+FGameVariables AGuessTheIsogramGameModeBase::GuessedCorrectly(const FString& Guess)
 {
 	if (Guess == GameVariables.MysteryWord)
-		GameVariables.bGameNotOver = false; 
+		GameVariables.bGameNotOver = false;
 
 	return GameVariables; 
 }
 
 // Check if the player's guess is an isogram
-bool AGuessTheIsogramGameModeBase::bIsIsogram(const FString& Word)
+bool AGuessTheIsogramGameModeBase::bIsIsogram(const FString& Guess)
 {
-	for (int32 Index = 0; Index < Word.Len(); Index++)
+	for (int32 Index = 0; Index < Guess.Len(); Index++)
 	{
-		for (int32 Comparison = Index + 1; Comparison < Word.Len(); Comparison++)
+		for (int32 Comparison = Index + 1; Comparison < Guess.Len(); Comparison++)
 		{
-			if (Word[Index] == Word[Comparison])
+			if (Guess[Index] == Guess[Comparison])
 				return false; 
 		}
 	}
 
 	return true; 
+}
+
+// Check if the player's guess is the same length
+bool AGuessTheIsogramGameModeBase::bIsSameLength(const FString& Guess)
+{
+	if (Guess.Len() != GameVariables.MysteryWord.Len())
+		return false;
+	else
+		return true; 
 }
 
 FCorrectLetters AGuessTheIsogramGameModeBase::GetCorrectLetters(const FString& Guess)
@@ -129,4 +142,12 @@ FCorrectLetters AGuessTheIsogramGameModeBase::GetCorrectLetters(const FString& G
 	CorrectLetters.DifferentPlaceLetter.Append(FString::FromInt(DifferentLetterCount)); 
 
 	return CorrectLetters; 
+}
+
+FGameVariables AGuessTheIsogramGameModeBase::OutOfLives()
+{
+	if (GameVariables.Lives <= 0)
+		GameVariables.bGameNotOver = false; 
+
+	return GameVariables; 
 }

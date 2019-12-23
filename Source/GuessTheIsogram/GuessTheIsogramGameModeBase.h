@@ -80,19 +80,27 @@ class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 
 		FHints Hints; 
 
-		// Process the player's guess
+		// Check if the player correctly guessed the mystery word
 		UFUNCTION(BlueprintCallable, Category = "UMG Game")
-			FGameVariables ProcessGuess(const FString& Guess); 
+			FGameVariables GuessedCorrectly(const FString& Guess); 
 
 		// Check if the player's guess is an isogram
 		UFUNCTION(BlueprintCallable, Category = "UMG Game")
-			bool bIsIsogram(const FString& Word); 
+			bool bIsIsogram(const FString& Guess); 
+
+		// Check if the player's guess is the same length
+		UFUNCTION(BlueprintCallable, Category = "UMG Game")
+			bool bIsSameLength(const FString& Guess); 
 
 		// Tell the player which letters they guessed correctly
 		UFUNCTION(BlueprintCallable, Category = "UMG Game")
 			FCorrectLetters GetCorrectLetters(const FString& Guess); 
 
 		FCorrectLetters CorrectLetters; 
+
+		// Check if the player is out of lives
+		UFUNCTION(BlueprintCallable, Category = "UMG Game")
+			FGameVariables OutOfLives(); 
 
 	protected:
 		// Called when the game starts
