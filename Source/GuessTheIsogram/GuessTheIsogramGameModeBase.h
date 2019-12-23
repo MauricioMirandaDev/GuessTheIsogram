@@ -24,7 +24,7 @@ struct FGameVariables
 	int32 Lives;
 
 	UPROPERTY(BlueprintReadWrite)
-	bool bGameOver; 
+	bool bGameNotOver; 
 };
 
 // Hints as to what the mystery word is
@@ -43,6 +43,21 @@ struct FHints
 	FString Letters;
 };
 
+// Amount of letters the player guessed correctly
+USTRUCT(BlueprintType)
+struct FCorrectLetters
+{
+	GENERATED_USTRUCT_BODY()
+
+	// Letters the player guessed correctly, and are in the same place
+	UPROPERTY(BlueprintReadWrite)
+	FString SamePlaceLetter = TEXT("Amount of letters guessed correctly and in the same place: ");
+
+	// Letters the player guessed correctly, but are in a different place
+	UPROPERTY(BlueprintReadWrite)
+	FString DifferentPlaceLetter = TEXT("Amount of letters guessed correctly but in the wrong place: "); 
+};
+
 UCLASS()
 class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 {
@@ -59,15 +74,25 @@ class GUESSTHEISOGRAM_API AGuessTheIsogramGameModeBase : public AGameModeBase
 
 		FGameVariables GameVariables;
 
-		// Check if the player's guess is an isogram
-		UFUNCTION(BlueprintCallable, Category = "UMG Game")
-			bool bIsIsogram(const FString& Word); 
-
 		// Provide hints to the player 
 		UFUNCTION(BlueprintCallable, Category = "UMG Game")
 			FHints GetHints(); 
 
 		FHints Hints; 
+
+		// Process the player's guess
+		UFUNCTION(BlueprintCallable, Category = "UMG Game")
+			FGameVariables ProcessGuess(const FString& Guess); 
+
+		// Check if the player's guess is an isogram
+		UFUNCTION(BlueprintCallable, Category = "UMG Game")
+			bool bIsIsogram(const FString& Word); 
+
+		// Tell the player which letters they guessed correctly
+		UFUNCTION(BlueprintCallable, Category = "UMG Game")
+			FCorrectLetters GetCorrectLetters(const FString& Guess); 
+
+		FCorrectLetters CorrectLetters; 
 
 	protected:
 		// Called when the game starts

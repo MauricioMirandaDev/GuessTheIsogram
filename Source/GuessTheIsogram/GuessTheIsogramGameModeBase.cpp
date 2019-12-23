@@ -12,8 +12,12 @@ void AGuessTheIsogramGameModeBase::BeginPlay()
 	InitializeGame(); 
 
 	GetHints(); 
+	
+	ProcessGuess(EnteredWord); 
 
 	bIsIsogram(EnteredWord); 
+
+	GetCorrectLetters(EnteredWord); 
 }
 
 // Remove the current widget and create a new one
@@ -44,7 +48,7 @@ FGameVariables AGuessTheIsogramGameModeBase::InitializeGame()
 
 	GameVariables.Lives = 5; 
 
-	GameVariables.bGameOver = false; 
+	GameVariables.bGameNotOver = true; 
 
 	return GameVariables; 
 }
@@ -74,6 +78,15 @@ FHints AGuessTheIsogramGameModeBase::GetHints()
 	return Hints; 
 }
 
+// Process the player's guess
+FGameVariables AGuessTheIsogramGameModeBase::ProcessGuess(const FString& Guess)
+{
+	if (Guess == GameVariables.MysteryWord)
+		GameVariables.bGameNotOver = false; 
+
+	return GameVariables; 
+}
+
 // Check if the player's guess is an isogram
 bool AGuessTheIsogramGameModeBase::bIsIsogram(const FString& Word)
 {
@@ -87,4 +100,33 @@ bool AGuessTheIsogramGameModeBase::bIsIsogram(const FString& Word)
 	}
 
 	return true; 
+}
+
+FCorrectLetters AGuessTheIsogramGameModeBase::GetCorrectLetters(const FString& Guess)
+{
+	int32 SameLetterCount = 0, DifferentLetterCount = 0; 
+
+	for (int32 GuessIndex = 0; GuessIndex < Guess.Len(); GuessIndex++)
+	{
+		if (Guess[GuessIndex] == GameVariables.MysteryWord[GuessIndex])
+		{
+			SameLetterCount++;
+			continue; 
+		}
+
+		for (int32 MysteryIndex = 0; MysteryIndex < GameVariables.MysteryWord.Len(); MysteryIndex++)
+		{
+			if (Guess[GuessIndex] == GameVariables.MysteryWord[MysteryIndex])
+			{
+				DifferentLetterCount++;
+				continue; 
+			}
+		}
+	}
+
+	CorrectLetters.SamePlaceLetter.Append(FString::FromInt(SameLetterCount)); 
+
+	CorrectLetters.DifferentPlaceLetter.Append(FString::FromInt(DifferentLetterCount)); 
+
+	return CorrectLetters; 
 }
