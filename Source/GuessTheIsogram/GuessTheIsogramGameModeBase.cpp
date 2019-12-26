@@ -13,15 +13,13 @@ void AGuessTheIsogramGameModeBase::BeginPlay()
 
 	GetHints(); 
 
-	GuessedCorrectly(EnteredWord); 
+	bGuessedCorrectly(EnteredWord);
+
+	ProcessGuess(EnteredWord); 
 
 	bIsIsogram(EnteredWord); 
 
-	bIsSameLength(EnteredWord); 
-
 	GetCorrectLetters(EnteredWord); 
-
-	OutOfLives(); 
 }
 
 // Remove the current widget and create a new one
@@ -49,8 +47,9 @@ void AGuessTheIsogramGameModeBase::ChangeMenuWidget(TSubclassOf<UUserWidget> New
 FGameVariables AGuessTheIsogramGameModeBase::InitializeGame()
 {
 	GameVariables.MysteryWord = WordList[FMath::RandRange(0, WordList.Num() - 1)]; 
+	UE_LOG(LogTemp, Warning, TEXT("Game initialized: %s"), *GameVariables.MysteryWord);
 
-	GameVariables.Lives = 5; 
+	GameVariables.Lives = 10; 
 
 	GameVariables.bGameNotOver = true; 
 
@@ -62,10 +61,12 @@ FHints AGuessTheIsogramGameModeBase::GetHints()
 {
 	int32 Vowels = 0, Consonants = 0; 
 
-	Hints.WordLength = TEXT("The word is ") + FString::FromInt(GameVariables.MysteryWord.Len()) + TEXT(" letters long"); 
+	Hints.WordLength = TEXT("The word is ") + FString::FromInt(GameVariables.MysteryWord.Len()) + TEXT(" letters long");
+	UE_LOG(LogTemp, Warning, TEXT("Myster word: %s"), *GameVariables.MysteryWord);
 
 	Hints.FirstLetter = TEXT("The first letter is "); 
 	Hints.FirstLetter.AppendChar(GameVariables.MysteryWord[0]); 
+	UE_LOG(LogTemp, Warning, TEXT("Myster word: %s"), *GameVariables.MysteryWord);
 
 	for (int32 Index = 0; Index < GameVariables.MysteryWord.Len(); Index++)
 	{
@@ -78,15 +79,58 @@ FHints AGuessTheIsogramGameModeBase::GetHints()
 	
 	Hints.Letters = TEXT("The word contains ") + FString::FromInt(Vowels) + TEXT(" vowel(s) and ") + FString::FromInt(Consonants) + 
 		TEXT(" consonant(s)"); 
+	UE_LOG(LogTemp, Warning, TEXT("Myster word: %s"), *GameVariables.MysteryWord);
 
 	return Hints; 
 }
 
-// Check if the player correctly guessed the mystery word
-FGameVariables AGuessTheIsogramGameModeBase::GuessedCorrectly(const FString& Guess)
+// Check if the player guessed the mystery word correctly 
+bool AGuessTheIsogramGameModeBase::bGuessedCorrectly(const FString& Guess)
 {
 	if (Guess == GameVariables.MysteryWord)
-		GameVariables.bGameNotOver = false;
+		return true;
+	else
+		return false; 
+}
+
+// If the player did not guess the mystery word correctly, figure out why and deduct a life where necessary
+FGameVariables AGuessTheIsogramGameModeBase::ProcessGuess(const FString& Guess)
+{
+	if (!bIsIsogram(Guess))
+	{
+		GameVariables.Lives--; 
+
+		if (GameVariables.Lives == 0)
+			GameVariables.bGameNotOver = false; 
+		else
+			GameVariables.bGameNotOver = true;
+
+		return GameVariables; 
+	}
+
+	if (Guess.Len() != GameVariables.MysteryWord.Len())
+	{
+		GameVariables.Lives--;
+
+		if (GameVariables.Lives == 0)
+			GameVariables.bGameNotOver = false;
+		else
+			GameVariables.bGameNotOver = true;
+
+		return GameVariables; 
+	}
+
+	if (Guess != GameVariables.MysteryWord)
+	{
+		GameVariables.Lives--; 
+
+		if (GameVariables.Lives == 0)
+			GameVariables.bGameNotOver = false; 
+		else
+			GameVariables.bGameNotOver = true;
+
+		return GameVariables; 
+	}
 
 	return GameVariables; 
 }
@@ -104,15 +148,6 @@ bool AGuessTheIsogramGameModeBase::bIsIsogram(const FString& Guess)
 	}
 
 	return true; 
-}
-
-// Check if the player's guess is the same length
-bool AGuessTheIsogramGameModeBase::bIsSameLength(const FString& Guess)
-{
-	if (Guess.Len() != GameVariables.MysteryWord.Len())
-		return false;
-	else
-		return true; 
 }
 
 FCorrectLetters AGuessTheIsogramGameModeBase::GetCorrectLetters(const FString& Guess)
@@ -142,12 +177,4 @@ FCorrectLetters AGuessTheIsogramGameModeBase::GetCorrectLetters(const FString& G
 	CorrectLetters.DifferentPlaceLetter.Append(FString::FromInt(DifferentLetterCount)); 
 
 	return CorrectLetters; 
-}
-
-FGameVariables AGuessTheIsogramGameModeBase::OutOfLives()
-{
-	if (GameVariables.Lives <= 0)
-		GameVariables.bGameNotOver = false; 
-
-	return GameVariables; 
 }
