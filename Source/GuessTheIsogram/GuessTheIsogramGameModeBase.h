@@ -25,6 +25,9 @@ struct FGameVariables
 
 	UPROPERTY(BlueprintReadWrite)
 	bool bGameNotOver; 
+
+	UPROPERTY(BlueprintReadWrite)
+	FString ErrorMessage; 
 };
 
 // Hints as to what the mystery word is
@@ -51,11 +54,17 @@ struct FCorrectLetters
 
 	// Letters the player guessed correctly, and are in the same place
 	UPROPERTY(BlueprintReadWrite)
-	FString SamePlaceLetter = TEXT("Amount of letters guessed correctly and in the same place: ");
+	FString SamePlaceHint = TEXT("Amount of letters guessed correctly and in the same place: ");
+
+	UPROPERTY(BlueprintReadWrite)
+	FString SamePlaceLetters; 
 
 	// Letters the player guessed correctly, but are in a different place
 	UPROPERTY(BlueprintReadWrite)
-	FString DifferentPlaceLetter = TEXT("Amount of letters guessed correctly but in the wrong place: "); 
+	FString DifferentPlaceHint = TEXT("Amount of letters guessed correctly but in the wrong place: "); 
+
+	UPROPERTY(BlueprintReadWrite)
+	FString DifferentPlaceLetters; 
 };
 
 UCLASS()
