@@ -7,10 +7,6 @@
 #include "Blueprint/UserWidget.h"
 #include "GuessTheIsogramGameModeBase.generated.h"
 
-/**
- * 
- */
-
 // Variables that will be used for game logic
 USTRUCT(BlueprintType)
 struct FGameVariables
@@ -46,7 +42,7 @@ struct FHints
 	FString Letters;
 };
 
-// Amount of letters the player guessed correctly
+// Letters that the player guessed correctly
 USTRUCT(BlueprintType)
 struct FCorrectLetters
 {
@@ -54,14 +50,14 @@ struct FCorrectLetters
 
 	// Letters the player guessed correctly, and are in the same place
 	UPROPERTY(BlueprintReadWrite)
-	FString SamePlaceHint = TEXT("Amount of letters guessed correctly and in the same place: ");
+	FString SamePlaceHint = TEXT("Letters guessed correctly and in the same place: ");
 
 	UPROPERTY(BlueprintReadWrite)
 	FString SamePlaceLetters; 
 
 	// Letters the player guessed correctly, but are in a different place
 	UPROPERTY(BlueprintReadWrite)
-	FString DifferentPlaceHint = TEXT("Amount of letters guessed correctly but in the wrong place: "); 
+	FString DifferentPlaceHint = TEXT("Letters guessed correctly but in the wrong place: "); 
 
 	UPROPERTY(BlueprintReadWrite)
 	FString DifferentPlaceLetters; 

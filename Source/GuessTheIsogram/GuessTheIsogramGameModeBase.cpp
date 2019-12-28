@@ -142,8 +142,6 @@ bool AGuessTheIsogramGameModeBase::bIsIsogram(const FString& Guess)
 
 FCorrectLetters AGuessTheIsogramGameModeBase::GetCorrectLetters(const FString& Guess)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Ready for letters")); 
-
 	CorrectLetters.SamePlaceLetters = TEXT(""); 
 
 	CorrectLetters.DifferentPlaceLetters = TEXT(""); 
